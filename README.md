@@ -1,3 +1,3 @@
-# Exact Diagonalisation (t-J)
+# Exact Diagonalisation (RIXS)
 
-This repository contains code tha is able to calculate exact diagonalisation of t-J model and also can calculate Static and dynamical Succeptibility. 
+This repository contains code for exact diagonalisation calculations of dynamical corelation functions for a Heisenberg spin-1/2 chain, with applications to RIXS. 
