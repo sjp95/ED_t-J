@@ -53,3 +53,13 @@ with no-double-occupancy constraint.
 ## Notes
 - Finite-size effects are expected; compare trends across cluster sizes where possible.
 - Energy broadening can be applied when plotting spectra.
+
+# Third-party dependencies
+
+This project vendors the following open-source libraries:
+
+- HighFive (BSD-3-Clause)
+  https://github.com/BlueBrain/HighFive.git
+
+- Eigen (MPL 2.0)
+  https://eigen.tuxfamily.org
