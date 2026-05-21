@@ -3,14 +3,23 @@
 
 #include <iostream>
 #include <cmath>
+#define EIGEN_USE_MKL_ALL
 #include <Eigen/Dense>
+
 #include <vector>
 #include <complex>
 
-#include <lapacke.h>
+//#define EIGEN_USE_MKL_ALL
+// #include <Accelerate/Accelerate.h>
+// #include <lapacke.h>
+// #include <essl.h>
+using namespace std;
+using namespace Eigen;
+
 
 typedef std::complex<double> cd;
 typedef std::pair<Eigen::MatrixXcd, Eigen::VectorXd> Spectrum;
+typedef std::pair<Eigen::MatrixXcd, std::vector<double> > stdSpectrum;
 
 using Eigen::MatrixXcd;
 using Eigen::VectorXd;
@@ -24,6 +33,12 @@ int L;
 
 double filter_d(double x) { return (abs(x) <= 1e-4) ? 0 : x; }
 void increment_test(const int &x, int &y) { y = x + y; }
+
+extern "C" {
+void zheev_( char* jobz, char* uplo, int* n, __complex__ double * a, int* lda, double* w, __complex__ double * work, int* lwork, double* rwork, int* info );
+void zgeev_(char* jobz, char* uplo, int* n, __complex__ double * a, int* lda , __complex__ double * w, __complex__ double * vl, int* LDVL, __complex__ double *vr, int* LDVR,__complex__ double * WORK, int* lwork, double* rwork, int* info);	
+}
+
 
 bool zheev_cpp(MatrixXcd &A, vector<double> &lambda, char eigenvec_choice = 'N')
 {
@@ -77,14 +92,21 @@ bool zgeev_cpp(MatrixXcd &A, vector<double> &lambda, char eigenvec_choice = 'N')
     return INFO == 0;
 }
 
-vector<double> stdEigenvalues(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
+vector<double> stdEigenvalues(MatrixXcd &A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
 {
     std::vector<double> lambda;
     if (diagonalization_routine(A, lambda, 'N'))
+    {
         return lambda;
+    }
+    else
+    {
+        std::cout<< "Sorry \n Could not compute the eigenvalues"<< endl;
+        return {0,0};
+    }
 }
 
-VectorXd Eigenvalues(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
+VectorXd Eigenvalues(MatrixXcd &A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
 {
     std::vector<double> lambda;
     if (diagonalization_routine(A, lambda, 'N'))
@@ -92,29 +114,54 @@ VectorXd Eigenvalues(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, v
         Eigen::Map<Eigen::ArrayXd> b(lambda.data(), lambda.size());
         return b;
     }
+    else
+    {
+        std::cout<< "Sorry \n Could not compute the eigenvalues"<< endl;
+        return {0,0};
+    }
 }
 
-MatrixXcd Eigenvectors(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
+MatrixXcd Eigenvectors(MatrixXcd &A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
 {
     std::vector<double> lambda;
     if (diagonalization_routine(A, lambda, 'V'))
+    {
         return A;
+    }
+    else
+    {
+        std::cout<< "Sorry \n Could not compute the eigenvectors"<< endl;
+        return A;
+    }
 }
 
-pair<MatrixXcd, vector<double> > stdEigenspectrum(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
+pair<MatrixXcd, vector<double> > stdEigenspectrum(MatrixXcd &A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
 {
     std::vector<double> lambda;
     if (diagonalization_routine(A, lambda, 'V'))
+    {
         return make_pair(A, lambda);
+    }
+    else
+    {
+        std::cout<< "Sorry \n Could not compute the eigenvalues & eigenvectors"<< endl;
+        return make_pair(A, lambda);
+    }
 }
 
-pair<MatrixXcd, VectorXd> Eigenspectrum(MatrixXcd A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
+pair<MatrixXcd, VectorXd> Eigenspectrum(MatrixXcd &A, bool (*diagonalization_routine)(MatrixXcd &, vector<double> &, char) = &zheev_cpp)
 {
     std::vector<double> lambda;
     if (diagonalization_routine(A, lambda, 'V'))
     {
         Eigen::Map<Eigen::ArrayXd> b(lambda.data(), lambda.size());
         return make_pair(A, b);
+    }
+    else
+    {
+        std::cout<< "Sorry \n Could not compute the eigenvalues & eigenvectors"<< endl;
+        Eigen::Map<Eigen::ArrayXd> b(lambda.data(), lambda.size());
+        return make_pair(A,b);
     }
 }
 

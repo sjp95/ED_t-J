@@ -1,6 +1,9 @@
 #ifndef MASTER_HPP_INCLUDED
 #define MASTER_HPP_INCLUDED
 #include <iomanip>
+#include <Eigen/Dense>
+#include <highfive/H5File.hpp>
+#include <highfive/eigen.hpp>
 #include "values.hpp"
 #include "Hamiltonian/Hamiltonian.hpp"
 #include "Hamiltonian/hopping.hpp"
@@ -97,6 +100,34 @@ void input::Master_print(int ii,int order)
     cout<< "======================================================" <<endl; 
     BASIS_print();
     //--------------------------------------------------//
+    //==========================================================//
+    // Try loading existing eigenspectrum
+    //==========================================================//
+    if (ii == 0 && std::filesystem::exists(h5file))
+    {
+        try
+        {
+            cout << "===============================\n";
+            cout << "Existing HDF5 file found.\n";
+            cout << "Loading eigenspectrum...\n";
+            cout << "===============================\n";
+
+            HighFive::File file(h5file, HighFive::File::ReadOnly);
+
+            file.getDataSet("eigenvalues").read(e.second);
+            file.getDataSet("eigenvectors").read(e.first);
+
+            loaded_from_file = true;
+
+            cout << "HDF5 read successful\n";
+        }
+        catch (const std::exception& ex)
+        {
+            cerr << "HDF5 Read Error: " << ex.what() << endl;
+            cerr << "Recomputing eigenspectrum...\n";
+        }
+    }
+
     Hamiltonian();
     //--------------------------------------------------//
     cout<< H0 <<endl;
