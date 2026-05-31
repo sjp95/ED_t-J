@@ -1,9 +1,13 @@
 #ifndef MASTER_HPP_INCLUDED
 #define MASTER_HPP_INCLUDED
 #include <iomanip>
+#include <fstream>
+#include <filesystem>
+
 #include <Eigen/Dense>
 #include <highfive/H5File.hpp>
 #include <highfive/eigen.hpp>
+
 #include "values.hpp"
 #include "Hamiltonian/Hamiltonian.hpp"
 #include "Hamiltonian/hopping.hpp"
@@ -13,9 +17,9 @@
 #include "matworks.hpp"
 #include "Operator_NSC/operatorcall.hpp"
 //#include "Operator_SC/operatorcall.hpp"
+
 using namespace std;
 using namespace Eigen;
-
 void input::Master_print(int ii,int order)
 {
      auto start =chrono::steady_clock::now();
@@ -56,33 +60,81 @@ void input::Master_print(int ii,int order)
     int tut2=int(J1*100);                         //| ==== File | F
     int tut3=int(J2*100);
     //----------------------------------------------------------------------------------------------------------------------------------------------
-    bool path= createDirectory("../Data");
-    path= createDirectory("../Data/EV");
+    //bool path= createDirectory("../Data");
+    bool path= createDirectory("../Data/EV");
     //----------------------------------------------------------------------------------------------------------------------------------------------
-    if(ii==0)
-    {
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title1,"../Data/EV/e_up_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup+1,ndown-1); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title2,"../Data/EV/e_down_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup-1,ndown+1); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title11,"../Data/EV/ev_up_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup+1,ndown-1); //| ==== Name | I       
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title22,"../Data/EV/ev_down_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup-1,ndown+1); //| ==== Name | I     
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title0,"../Data/EV/e_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup,ndown); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(title00,"../Data/EV/ev_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup,ndown); //| ==== Name | I
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(basis0,"../Data/EV/Basis_0_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup,ndown); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(basis1,"../Data/EV/Basis_up_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup+1,ndown-1); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        sprintf(basis2,"../Data/EV/Basis_down_%d_%d_%d_%d_%lld_%lld_%lld.dat",tut0,tut1,tut2,tut3,N,nup-1,ndown+1); //| ==== Name | I        
-        //------------------------------------------------------------------------------------------------------------------------------------------
-    }
-    //==============================================================================================================================================//
-    //==============================================================================================================================================//
+    //=========================================================//
+    // Main sector
+    //=========================================================//
+    std::string h5_0 =
+        "../Data/EV/EigenSpectrum_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup)  + "_" +
+        std::to_string(ndown)+ ".h5";
+
+    std::string basis_0 =
+        "../Data/EV/Basis_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup)  + "_" +
+        std::to_string(ndown)+ ".dat";
+
+
+    //=========================================================//
+    // nup+1 , ndown-1 sector
+    //=========================================================//
+    std::string h5_up =
+        "../Data/EV/EigenSpectrum_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup+1)  + "_" +
+        std::to_string(ndown-1)+ ".h5";
+
+    std::string basis_up =
+        "../Data/EV/Basis_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup+1)  + "_" +
+        std::to_string(ndown-1)+ ".dat";
+
+
+    //=========================================================//
+    // nup-1 , ndown+1 sector
+    //=========================================================//
+    std::string h5_down =
+        "../Data/EV/EigenSpectrum_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup-1)  + "_" +
+        std::to_string(ndown+1)+ ".h5";
+
+    std::string basis_down =
+        "../Data/EV/Basis_" +
+        std::to_string(tut0) + "_" +
+        std::to_string(tut1) + "_" +
+        std::to_string(tut2) + "_" +
+        std::to_string(tut3) + "_" +
+        std::to_string(N)    + "_" +
+        std::to_string(nup-1)  + "_" +
+        std::to_string(ndown+1)+ ".dat";
+    //============================================================//
+    //============================================================//
   
     //=========================================================//
     //=========================================================/
@@ -103,84 +155,93 @@ void input::Master_print(int ii,int order)
     //==========================================================//
     // Try loading existing eigenspectrum
     //==========================================================//
-    if (ii == 0 && std::filesystem::exists(h5file))
+    pair<MatrixXcd, VectorXd> e;
+    bool loaded_from_file = false;
+
+    //=========================================================//
+    // Read eigenspectrum if available
+    //=========================================================//
+    //if(ii==0 && std::filesystem::exists(h5_0))
+    if(ii==0 && std::ifstream(h5_0).good())
     {
         try
         {
-            cout << "===============================\n";
-            cout << "Existing HDF5 file found.\n";
-            cout << "Loading eigenspectrum...\n";
-            cout << "===============================\n";
+            cout<<"=================================="<<endl;
+            cout<<"Loading eigenspectrum from HDF5"<<endl;
+            cout<<"=================================="<<endl;
 
-            HighFive::File file(h5file, HighFive::File::ReadOnly);
+            HighFive::File file(h5_0,HighFive::File::ReadOnly);
 
             file.getDataSet("eigenvalues").read(e.second);
+
             file.getDataSet("eigenvectors").read(e.first);
 
             loaded_from_file = true;
 
-            cout << "HDF5 read successful\n";
+            cout<<"HDF5 read successful"<<endl;
         }
-        catch (const std::exception& ex)
+        catch(const std::exception& ex)
         {
-            cerr << "HDF5 Read Error: " << ex.what() << endl;
-            cerr << "Recomputing eigenspectrum...\n";
+            cerr<<"HDF5 Read Error : " <<ex.what()<<endl;
+
+            cerr<<"Recomputing..."<<endl;
         }
     }
-
-    Hamiltonian();
-    //--------------------------------------------------//
-    cout<< H0 <<endl;
-    //--------------------------------------------------//
-    pair<MatrixXcd, VectorXd> e = Eigenspectrum(H0);
-    Oi.es_0=e.second(0);
-    Oi.evs_0=e.first.col(0);
-    Oi.basisarray0=basisarray;
-    //==========================//
-    basisarray.clear();
-    H0.resize(0, 0);
-    //==========================//
-    Oi.le0=le;
-
-    //------------------------------------------------------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------------------------------------------
-
-    //============================================================//
-    if(ii==0)
+    //=========================================================//
+    // Diagonalize if file absent
+    //=========================================================//
+    if(!loaded_from_file)
     {
-        //=========================================================//
-        std::ofstream file00;               //| ==== File | eigen 
-        file00.open(title00);               //| ==== Open | vector
+        Hamiltonian();
 
-        std::ofstream file0;                //| ==== File | eigen
-        file0.open(title0);                 //| ==== Open | values
+        cout<<"=================================="<<endl;
+        cout<<"Diagonalizing Hamiltonian"<<endl;
+        cout<<"=================================="<<endl;
 
-        std::ofstream bes0;                //| ==== File | basis
-        bes0.open(basis0);                 //| ==== Open | location
-        //----------------------------------------------------------//
-        file00 << std::fixed << std::setprecision(16);
-        file0 << std::fixed << std::setprecision(16);
-        bes0 << std::fixed << std::setprecision(16);
-        //=========================================================//
-        //=========================================================//
-        file0<<e.second<<endl;
-        for (int i = 0; i < e.second.size(); i++)
+        e = Eigenspectrum(H0);
+
+        if(ii==0)
         {
-           file00<<e.first.col(i)<<endl;
-           file00<<"    "<<endl;
-           bes0<<basisarray[i]<<endl;
+            try
+            {
+                HighFive::File file(h5_0, HighFive::File::Overwrite);
+
+                file.createDataSet( "eigenvalues", e.second);
+
+                file.createDataSet("eigenvectors", e.first);
+
+                cout<<"HDF5 write successful"<<endl;
+            }
+            catch(const std::exception& ex)
+            {
+                cerr<<"HDF5 Write Error : "
+                    <<ex.what()<<endl;
+            }
+
+            //--------------------------------------------------
+            // Save basis separately
+            //--------------------------------------------------
+            std::ofstream bout(basis_0);
+
+            for(long long i=0;
+                i<(long long)basisarray.size();
+                i++)
+            {
+                bout << basisarray[i] << "\n";
+            }
+
+            bout.close();
         }
-        //=========================================================//
-        file00.close();
-        file0.close();
-        bes0.close();
-        //=========================================================//
     }
-    //============================================================//
-    //==========================//
-    e.second.resize(0);
-    e.first.resize(0,0);
-    //==========================//
+    //==========================================================//
+    //==========================================================//
+    Oi.es_0       = e.second(0);
+    Oi.evs_0      = e.first.col(0);
+    Oi.basisarray0 = basisarray;
+    Oi.le0        = le;
+    //==========================================================//
+    //==========================================================//
+
     //------------------------------------------------------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -89,7 +89,7 @@ target_link_libraries(s1 PRIVATE
     dl
 )
 
-target_link_libraries(r1 PRIVATE
+target_link_libraries(s1 PRIVATE
     HDF5::HDF5
 )
 #=============================================================================#
