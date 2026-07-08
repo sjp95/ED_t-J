@@ -1,3 +1,0 @@
-/media/subhajyoti/mydrive/ED_t-J/build/CMakeFiles/s1.dir
-/media/subhajyoti/mydrive/ED_t-J/build/CMakeFiles/edit_cache.dir
-/media/subhajyoti/mydrive/ED_t-J/build/CMakeFiles/rebuild_cache.dir
