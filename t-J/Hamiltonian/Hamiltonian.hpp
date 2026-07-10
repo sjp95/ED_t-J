@@ -31,7 +31,7 @@ complex<double> input::diagonal(int n)
         {
            
            complex <double> Dj=complex<double>(upi(j%N)-downi(j%N));
-           D0+=JJ(i,j%N)*(Di*Dj*0.25); //-0.25*abs(Di*Dj)
+           D0+=JJ(i,j%N)*(Di*Dj*0.25 - 0.25*(upi(i)+downi(i))*(upi(j%N)+downi(j%N)));
         //    cout<<JJ(i,j%N)*(Di*Dj*0.25)<<endl;
         }
     }
