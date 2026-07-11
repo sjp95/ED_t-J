@@ -12,19 +12,4 @@ authors:
 title: "Exact Diagonalization for t-J Model and RIXS Spectra"
 version: 1.0.0
 date-released: 2025-05-29
-url: "https://github.com/your-username/your-repo-name" # Placeholder, user can update
-preferred-citation:
-  type: article
-  authors:
-  - family-names: "Pal"
-    given-names: "Subhajyoti"
-  - family-names: "Thakur"
-    given-names: "Pradeep"
-  - family-names: "Nandy"
-    given-names: "Ashis Kumar"
-  - family-names: "Mukherjee"
-    given-names: "Anamitra"
-  doi: "10.48550/arXiv.2505.23208"
-  journal: "arXiv preprint arXiv:2505.23208"
-  title: "Emergent Quasiparticles & Field-Tuned RIXS Spectra in a Trimerized Spin-1/2 Chain"
-  year: 2025
+url: "https://github.com/your-username/your-repo-name"

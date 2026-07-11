@@ -116,7 +116,19 @@ Below are some figures extracted from the paper [arXiv:2505.23208](https://arxiv
 
 ## Citation
 
-If you use this code in your research, please cite the following paper:
+If you use this code in your research, please cite this software as follows:
+
+```bibtex
+@software{pal_ed_tJ_rixs,
+  author = {Subhajyoti Pal and Pradeep Thakur and Ashis Kumar Nandy and Anamitra Mukherjee},
+  title = {Exact Diagonalization for t-J Model and RIXS Spectra},
+  url = {https://github.com/your-username/your-repo-name},
+  version = {1.0.0},
+  year = {2025}
+}
+```
+
+Additionally, please cite the associated research paper:
 
 ```bibtex
 @misc{pal2025emergent,
