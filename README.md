@@ -114,6 +114,36 @@ Below are some figures extracted from the paper [arXiv:2505.23208](https://arxiv
 
 ---
 
+## Citation
+
+If you use this code in your research, please cite this software as follows:
+
+```bibtex
+@software{pal_ed_tJ_rixs,
+  author = {Subhajyoti Pal and Pradeep Thakur and Ashis Kumar Nandy and Anamitra Mukherjee},
+  title = {Exact Diagonalization for t-J Model and RIXS Spectra},
+  url = {https://github.com/your-username/your-repo-name},
+  version = {1.0.0},
+  year = {2025}
+}
+```
+
+Additionally, please cite the associated research paper:
+
+```bibtex
+@misc{pal2025emergent,
+      title={Emergent Quasiparticles \& Field-Tuned RIXS Spectra in a Trimerized Spin-1/2 Chain},
+      author={Subhajyoti Pal and Pradeep Thakur and Ashis Kumar Nandy and Anamitra Mukherjee},
+      year={2025},
+      eprint={2505.23208},
+      archivePrefix={arXiv},
+      primaryClass={cond-mat.str-el},
+      url={https://arxiv.org/abs/2505.23208},
+}
+```
+
+---
+
 ## Third-party dependencies
 This project vendors the following open-source libraries:
 - **HighFive** (BSD-3-Clause)
