@@ -1,4 +1,5 @@
 *.sge
+*.log
 t0
 h
 .txt
